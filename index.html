@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>全泽同 - 个人主页</title>
+  <title>全泽同 - 个人主页 | Zetong Quan</title>
   
   <!-- 引入 Tailwind CSS 进行快速排版 -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -21,8 +21,16 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       color: #333;
       margin: 0;
-      overflow-x: hidden;
     }
+    
+    html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* 语言切换控制核心 CSS */
+    body.lang-cn .lang-en { display: none !important; }
+    body.lang-en .lang-cn { display: none !important; }
 
     /* 动态渐变背景容器 */
     #dynamic-bg {
@@ -43,7 +51,7 @@
     /* 高级粒子特效 Canvas */
     #bg-canvas {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: -1; pointer-events: none; opacity: 0.9; /* 进一步提升层能见度 */
+      z-index: -1; pointer-events: none; opacity: 0.9;
     }
 
     /* 顶部滚动进度条 */
@@ -138,8 +146,15 @@
   </style>
 </head>
 
-<body>
-  <!-- 动态渐变背景与粒子 -->
+<!-- 默认语言设为中文 -->
+<body class="lang-cn">
+  
+  <!-- 中英文切换悬浮按钮 -->
+  <button onclick="toggleLanguage()" class="fixed top-4 right-4 md:top-6 md:right-8 z-[1000] bg-white/80 backdrop-blur-md border border-gray-200 shadow-md rounded-full px-4 py-2 text-sm font-semibold text-gray-700 hover:text-pink-500 hover:border-pink-300 transition-all hover:-translate-y-0.5 cursor-pointer">
+    <i class="fas fa-language mr-1 text-blue-500"></i> <span id="lang-btn-text">English Version</span>
+  </button>
+
+  <!-- 动态渐变背景与粒子 (调整了层级关系，修复滚动遮挡问题) -->
   <div id="dynamic-bg"></div>
   <div class="bg-grid"></div>
   <canvas id="bg-canvas"></canvas>
@@ -149,18 +164,17 @@
 
   <!-- 顶部导航栏 -->
   <nav class="sticky top-0 w-full bg-white/60 backdrop-blur-lg border-b border-gray-100 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-center gap-10 md:gap-16 overflow-x-auto text-base font-semibold text-gray-700 tracking-wide">
-      <a href="#home" class="hover:text-pink-500 transition hover:-translate-y-0.5">主页</a>
-      <a href="#about" class="hover:text-pink-500 transition hover:-translate-y-0.5">个人简介</a>
-      <a href="#education" class="hover:text-pink-500 transition hover:-translate-y-0.5">教育背景</a>
-      <!-- [修改1]：工作经历改为实习经历 -->
-      <a href="#experience" class="hover:text-pink-500 transition hover:-translate-y-0.5">实习经历</a>
-      <a href="#campus" class="hover:text-pink-500 transition hover:-translate-y-0.5">校园经历</a>
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-center gap-6 md:gap-16 overflow-x-auto text-base font-semibold text-gray-700 tracking-wide">
+      <a href="#home" class="hover:text-pink-500 transition hover:-translate-y-0.5"><span class="lang-cn">主页</span><span class="lang-en">Home</span></a>
+      <a href="#about" class="hover:text-pink-500 transition hover:-translate-y-0.5"><span class="lang-cn">个人简介</span><span class="lang-en">About Me</span></a>
+      <a href="#education" class="hover:text-pink-500 transition hover:-translate-y-0.5"><span class="lang-cn">教育背景</span><span class="lang-en">Education</span></a>
+      <a href="#experience" class="hover:text-pink-500 transition hover:-translate-y-0.5"><span class="lang-cn">实习经历</span><span class="lang-en">Experience</span></a>
+      <a href="#campus" class="hover:text-pink-500 transition hover:-translate-y-0.5"><span class="lang-cn">校园经历</span><span class="lang-en">Campus</span></a>
     </div>
   </nav>
 
   <!-- 主体内容区 -->
-  <div class="max-w-6xl mx-auto px-4 py-10 flex flex-col md:flex-row gap-10" id="home">
+  <div class="relative max-w-6xl mx-auto px-4 py-10 flex flex-col md:flex-row gap-10 z-10" id="home">
     
     <!-- 左侧：个人信息悬浮栏 -->
     <aside class="w-full md:w-64 shrink-0">
@@ -173,10 +187,16 @@
           </div>
         </div>
         
-        <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">全泽同</h2>
+        <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">
+          <span class="lang-cn">全泽同</span>
+          <span class="lang-en">Zetong Quan</span>
+        </h2>
+        
         <div class="text-center text-gray-500 mb-8 text-sm space-y-2 font-medium">
-          <p>硕士：华中科技大学 | 会计学</p>
-          <p>本科：中南财经政法大学 | 会计学</p>
+          <p class="lang-cn">硕士：华中科技大学 | 会计学</p>
+          <p class="lang-en">Master: HUST | Accounting</p>
+          <p class="lang-cn">本科：中南财经政法大学 | 会计学</p>
+          <p class="lang-en">Bachelor: ZUEL | Accounting</p>
         </div>
         
         <div class="space-y-4 text-sm px-4">
@@ -190,16 +210,22 @@
             <i class="fab fa-weixin w-5 text-center text-lg"></i> <span>WeChat: 18071590005</span>
           </div>
           <div class="flex items-center gap-3 text-gray-600 transition hover-move">
-            <i class="fas fa-user-tie w-5 text-center text-lg"></i> <span>中共党员</span>
+            <i class="fas fa-user-tie w-5 text-center text-lg"></i> 
+            <span class="lang-cn">中共党员</span>
+            <span class="lang-en">CPC Member</span>
           </div>
         </div>
 
         <div class="mt-8 px-4 flex flex-col gap-3">
           <a href="resume.pdf" target="_blank" class="flex items-center justify-center gap-2 py-2.5 px-4 bg-gradient-to-r from-[#EC707D] to-[#e45b6a] text-white rounded-full shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all text-sm font-medium">
-            <i class="fas fa-file-pdf"></i> <span>查看 PDF 简历</span>
+            <i class="fas fa-file-pdf"></i> 
+            <span class="lang-cn">查看 PDF 简历</span>
+            <span class="lang-en">View PDF Resume</span>
           </a>
           <a href="proof.pdf" target="_blank" class="flex items-center justify-center gap-2 py-2.5 px-4 bg-gradient-to-r from-[#6C95B5] to-[#5882a3] text-white rounded-full shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all text-sm font-medium">
-            <i class="fas fa-file-alt"></i> <span>查看证明材料</span>
+            <i class="fas fa-file-alt"></i> 
+            <span class="lang-cn">查看证明材料</span>
+            <span class="lang-en">View Certificates</span>
           </a>
         </div>
       </div>
@@ -208,44 +234,94 @@
     <!-- 右侧：详细内容区 -->
     <main class="flex-1 min-w-0">
       
+      <!-- 个人简介 模块 -->
       <section id="about">
-        <h1 class="section-title">👤 个人简介</h1>
+        <h1 class="section-title">
+          <span class="lang-cn">👤 个人简介</span>
+          <span class="lang-en">👤 About Me</span>
+        </h1>
+        
         <div class="glass-card paper-tilt p-7 mb-6 pl-8">
-          <p class="leading-relaxed text-gray-700 hover-move mb-3">
-            我是<strong>全泽同</strong>，目前在<strong>华中科技大学</strong>攻读会计学（全日制）硕士学位。本科毕业于<strong>中南财经政法大学</strong>，成绩优异（3.9/4.0）。我拥有丰富的财务BP、审计及项目管理实习经验，曾在美的集团、安永、立信等知名企业及机构实习。具备扎实的财会专业基础，已通过CPA 5科及ACCA。
-          </p>
-          <p class="leading-relaxed text-gray-700 hover-move mb-3">
-            在日常工作与学习中，我<strong>经常思考并积极推动财务流程的数字化、智能化与自动化</strong>。我熟练掌握 <strong>SQL</strong> 以及 <strong>Python (pandas, numpy)</strong> 进行多维度的数据爬取、清洗与深度分析；精通运用 <strong>Tableau</strong> 和 <strong>PowerBI</strong> 搭建商业数据看板与可视化建模；同时，我能够熟练使用 <strong>Excel VBA</strong> 编写宏程序以大幅优化重复性工作，并在实习中熟练操作 <strong>SAP</strong> 系统完成各项财务核算与跨部门流程流转。
-          </p>
-          <p class="leading-relaxed text-gray-700 hover-move">
-            此外，我对新技术保持高度敏锐，能够熟练运用各类 <strong>AI 前沿工具与 Agent (如 ChatGPT、Claude、Gemini 等)</strong> 深度赋能数据处理与日常工作，显著提升分析效率与产出质量。期待在财务、审计与数据驱动的商业决策等核心业务领域深耕并创造价值。
-          </p>
+          <!-- 中文简介 -->
+          <div class="lang-cn">
+            <p class="leading-relaxed text-gray-700 hover-move mb-3">
+              我是<strong>全泽同</strong>，目前在<strong>华中科技大学</strong>攻读会计学（全日制）硕士学位。本科毕业于<strong>中南财经政法大学</strong>，成绩优异（3.9/4.0）。我拥有丰富的财务BP、审计及项目管理实习经验，曾在美的集团、安永、立信等知名企业及机构实习。具备扎实的财会专业基础，已通过CPA 5科及ACCA。
+            </p>
+            <p class="leading-relaxed text-gray-700 hover-move mb-3">
+              在日常工作与学习中，我<strong>经常思考并积极推动财务流程的数字化、智能化与自动化</strong>。我熟练掌握 <strong>SQL</strong> 以及 <strong>Python (pandas, numpy)</strong> 进行多维度的数据爬取、清洗与深度分析；精通运用 <strong>Tableau</strong> 和 <strong>PowerBI</strong> 搭建商业数据看板与可视化建模；同时，我能够熟练使用 <strong>Excel VBA</strong> 编写宏程序以大幅优化重复性工作，并在实习中熟练操作 <strong>SAP</strong> 系统完成各项财务核算与跨部门流程流转。
+            </p>
+            <p class="leading-relaxed text-gray-700 hover-move">
+              此外，我对新技术保持高度敏锐，能够熟练运用各类 <strong>AI 前沿工具与 Agent (如 ChatGPT、Claude、Gemini 等)</strong> 深度赋能数据处理与日常工作，显著提升分析效率与产出质量。期待在财务、审计与数据驱动的商业决策等核心业务领域深耕并创造价值。
+            </p>
+          </div>
+          
+          <!-- 英文简介 -->
+          <div class="lang-en text-[0.95rem]">
+            <p class="leading-relaxed text-gray-700 hover-move mb-3">
+              I am <strong>Zetong Quan</strong>, currently pursuing a full-time Master's degree in Accounting at <strong>Huazhong University of Science and Technology (HUST)</strong>. I graduated from <strong>Zhongnan University of Economics and Law (ZUEL)</strong> with an outstanding GPA of 3.9/4.0. I have gathered extensive internship experience in Financial BP, Auditing, and Project Management at renowned companies including Midea Group, EY, and BDO. Endowed with a solid foundation in finance, I have passed 5 out of 6 CPA subjects and completed ACCA.
+            </p>
+            <p class="leading-relaxed text-gray-700 hover-move mb-3">
+              I consistently focus on driving the <strong>digitalization, intelligence, and automation of financial processes</strong>. I am highly proficient in <strong>SQL</strong> and <strong>Python (pandas, numpy)</strong> for data scraping, cleaning, and in-depth analysis. I excel at building business dashboards and visualization models using <strong>Tableau</strong> and <strong>PowerBI</strong>. Furthermore, I skillfully use <strong>Excel VBA</strong> to write macros that optimize repetitive tasks, and I am experienced in operating the <strong>SAP</strong> system for financial accounting and cross-departmental workflows.
+            </p>
+            <p class="leading-relaxed text-gray-700 hover-move">
+              Additionally, I maintain a keen sensitivity to emerging technologies, adeptly utilizing cutting-edge <strong>AI tools and Agents (such as ChatGPT, Claude, Gemini, etc.)</strong> to empower data processing and daily tasks, thereby significantly boosting analytical efficiency and output quality. I look forward to adding value in core business areas like finance, auditing, and data-driven commercial decision-making.
+            </p>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
           <div class="glass-card paper-tilt p-6 pl-8">
-            <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fas fa-certificate text-pink-500"></i> 专业素养</h3>
-            <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700">
+            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+              <i class="fas fa-certificate text-pink-500"></i> 
+              <span class="lang-cn">专业素养</span><span class="lang-en">Professional Skills</span>
+            </h3>
+            
+            <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700 lang-cn">
               <li class="hover-move"><strong>执业资格：</strong>CPA (5/6)、ACCA</li>
               <li class="hover-move"><strong>金融证书：</strong>证券从业资格证、基金从业资格证</li>
-              <li class="hover-move"><strong>英语水平：</strong>CET-6 (612)、CET-4 (620)</li>
+              <!-- [修改1]：直接写英语四级、英语六级 -->
+              <li class="hover-move"><strong>英语水平：</strong>英语六级 (612)、英语四级 (620)</li>
               <li class="hover-move"><strong>荣誉奖项：</strong>国家奖学金、校级一等奖学金、优秀学生干部、优秀毕业生、优秀党员</li>
             </ul>
+            
+            <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700 lang-en">
+              <li class="hover-move"><strong>Qualifications:</strong> CPA (5/6), ACCA</li>
+              <li class="hover-move"><strong>Certificates:</strong> Securities & Fund Qualification Certificates</li>
+              <li class="hover-move"><strong>English:</strong> CET-6 (612), CET-4 (620)</li>
+              <li class="hover-move"><strong>Honors:</strong> National Scholarship, First-class Univ. Scholarship, Outstanding Student Leader, Outstanding Graduate, Excellent CPC Member</li>
+            </ul>
           </div>
+          
           <div class="glass-card paper-tilt p-6 pl-8">
-            <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fas fa-laptop-code text-blue-500"></i> 技能与工具</h3>
-            <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700">
+            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+              <i class="fas fa-laptop-code text-blue-500"></i> 
+              <span class="lang-cn">技能与工具</span><span class="lang-en">Tech & Tools</span>
+            </h3>
+            
+            <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700 lang-cn">
               <li class="hover-move"><strong>数据分析：</strong>精通 SQL、Python (pandas, numpy)、Tableau、PowerBI 进行分析与可视化</li>
               <li class="hover-move"><strong>流程自动化：</strong>熟练运用 Excel VBA 编写自动化脚本，优化财务流程</li>
               <li class="hover-move"><strong>新质生产力：</strong>熟练运用前沿 AI 模型及 Agent (ChatGPT/Claude/Gemini) 提升工作流效率</li>
               <li class="hover-move"><strong>企业软件：</strong>熟练掌握 SAP 系统操作及进阶 Office 办公软件</li>
             </ul>
+            
+            <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700 lang-en">
+              <li class="hover-move"><strong>Data Analysis:</strong> Proficient in SQL, Python (pandas, numpy), Tableau, and PowerBI.</li>
+              <li class="hover-move"><strong>Automation:</strong> Skilled in Excel VBA scripting to optimize financial workflows.</li>
+              <li class="hover-move"><strong>AI Productivity:</strong> Adept at using AI models and Agents (ChatGPT/Claude) to enhance efficiency.</li>
+              <li class="hover-move"><strong>Enterprise Software:</strong> Hands-on experience with SAP and advanced MS Office suites.</li>
+            </ul>
           </div>
         </div>
       </section>
 
+      <!-- 教育背景 模块 -->
       <section id="education">
-        <h1 class="section-title">🎓 教育背景</h1>
+        <h1 class="section-title">
+          <span class="lang-cn">🎓 教育背景</span>
+          <span class="lang-en">🎓 Education</span>
+        </h1>
+        
         <div class="glass-card paper-tilt p-7 mb-5 pl-8 flex flex-col md:flex-row gap-5 items-start">
           <div class="w-14 h-14 shrink-0 rounded-full border border-gray-200 shadow-sm bg-white flex items-center justify-center overflow-hidden">
             <img src="hust_logo.png" alt="华科" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -254,17 +330,23 @@
           <div class="flex-1 w-full">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
               <h3 class="font-bold text-xl text-gray-900 hover-move flex flex-wrap items-center gap-2">
-                华中科技大学
+                <span class="lang-cn">华中科技大学</span>
+                <span class="lang-en">Huazhong Univ. of Science and Technology</span>
                 <span class="bg-[#EC707D] text-white text-xs px-2 py-0.5 rounded-md font-normal tracking-wide shadow-sm">985</span>
                 <span class="bg-[#6C95B5] text-white text-xs px-2 py-0.5 rounded-md font-normal tracking-wide shadow-sm">211</span>
-                <span class="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2 py-0.5 rounded-md font-normal tracking-wide">双一流</span>
+                <span class="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2 py-0.5 rounded-md font-normal tracking-wide lang-cn">双一流</span>
+                <span class="bg-gray-100 text-gray-600 border border-gray-200 text-[10px] px-2 py-0.5 rounded-md font-normal tracking-wide lang-en">Double First-Class</span>
               </h3>
               <span class="text-gray-500 text-sm font-semibold mt-1 md:mt-0 tracking-wide">[2024.09 - 2027.06]</span>
             </div>
-            <p class="text-gray-700 font-medium mb-3 hover-move text-sm md:text-base">管理学院 - 会计学 (全日制) 硕士研究生</p>
+            <p class="text-gray-700 font-medium mb-3 hover-move text-sm md:text-base">
+              <span class="lang-cn">管理学院 - 会计学 (全日制) 硕士研究生</span>
+              <span class="lang-en">School of Management - Accounting (Full-time Master)</span>
+            </p>
             <div class="text-sm text-gray-600 leading-relaxed hover-move space-y-1.5">
-              <p><i class="fas fa-star text-pink-400 w-5"></i> <strong>成绩排名：</strong>3.9/4.0</p>
-              <p><i class="fas fa-user-shield text-blue-400 w-5"></i> <strong>校园职务：</strong>学生党支部组织委员</p>
+              <!-- [修改2]：统一成绩与职务前面的图标 -->
+              <p><i class="fas fa-star text-pink-400 w-5 text-center"></i> <strong><span class="lang-cn">成绩排名：</span><span class="lang-en">GPA: </span></strong>3.9/4.0</p>
+              <p><i class="fas fa-user-shield text-blue-400 w-5 text-center"></i> <strong><span class="lang-cn">校园职务：</span><span class="lang-en">Role: </span></strong><span class="lang-cn">学生党支部组织委员</span><span class="lang-en">Org. Member of Student Party Branch</span></p>
             </div>
           </div>
         </div>
@@ -277,80 +359,158 @@
           <div class="flex-1 w-full">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
               <h3 class="font-bold text-xl text-gray-900 hover-move flex flex-wrap items-center gap-2">
-                中南财经政法大学
+                <span class="lang-cn">中南财经政法大学</span>
+                <span class="lang-en">Zhongnan Univ. of Economics and Law</span>
                 <span class="bg-[#6C95B5] text-white text-xs px-2 py-0.5 rounded-md font-normal tracking-wide shadow-sm">211</span>
-                <span class="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2 py-0.5 rounded-md font-normal tracking-wide">双一流</span>
+                <span class="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2 py-0.5 rounded-md font-normal tracking-wide lang-cn">双一流</span>
+                <span class="bg-gray-100 text-gray-600 border border-gray-200 text-[10px] px-2 py-0.5 rounded-md font-normal tracking-wide lang-en">Double First-Class</span>
               </h3>
               <span class="text-gray-500 text-sm font-semibold mt-1 md:mt-0 tracking-wide">[2020.09 - 2024.06]</span>
             </div>
-            <p class="text-gray-700 font-medium mb-3 hover-move text-sm md:text-base">会计学院 - 会计学 (全日制) 本科</p>
+            <p class="text-gray-700 font-medium mb-3 hover-move text-sm md:text-base">
+              <span class="lang-cn">会计学院 - 会计学 (全日制) 本科</span>
+              <span class="lang-en">School of Accounting - Accounting (Full-time Bachelor)</span>
+            </p>
             <div class="text-sm text-gray-600 leading-relaxed hover-move space-y-1.5">
-              <p><i class="fas fa-trophy text-pink-400 w-5"></i> <strong>成绩排名：</strong>3.9/4.0 (第二名)</p>
-              <p><i class="fas fa-users text-blue-400 w-5"></i> <strong>校园职务：</strong>团支部书记、学生党支部组织委员</p>
+              <!-- [修改2]：统一成绩与职务前面的图标 -->
+              <p><i class="fas fa-star text-pink-400 w-5 text-center"></i> <strong><span class="lang-cn">成绩排名：</span><span class="lang-en">GPA: </span></strong>3.9/4.0 (<span class="lang-cn">第二名</span><span class="lang-en">Rank: 2nd</span>)</p>
+              <p><i class="fas fa-user-shield text-blue-400 w-5 text-center"></i> <strong><span class="lang-cn">校园职务：</span><span class="lang-en">Role: </span></strong><span class="lang-cn">团支部书记、学生党支部组织委员</span><span class="lang-en">Youth League Branch Secretary, Org. Member of Student Party Branch</span></p>
             </div>
           </div>
         </div>
       </section>
 
       <section id="experience" class="mt-8">
-        <h1 class="section-title">💼 实习经历</h1>
+        <h1 class="section-title">
+          <span class="lang-cn">💼 实习经历</span>
+          <span class="lang-en">💼 Experience</span>
+        </h1>
         
+        <!-- 实习经历 1 -->
         <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2025.06-2025.10</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">美的集团(上海)有限公司</h3>
-          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>财务BP实习生</strong> | 库卡汽车自动化事业部</p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">
+            <span class="lang-cn">美的集团(上海)有限公司</span>
+            <span class="lang-en">Midea Group (Shanghai) Co., Ltd.</span>
+          </h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move">
+            <strong class="lang-cn">财务BP实习生</strong><strong class="lang-en">Financial BP Intern</strong>
+            <span class="lang-cn"> | 库卡汽车自动化事业部</span><span class="lang-en"> | KUKA Robotics Automation Div.</span>
+          </p>
+          
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2 lang-cn">
             <li class="hover-move"><strong>资金优化与自动化：</strong>结合月度资金预算与库存周转情况统筹排款，并利用 <strong>Excel VBA</strong> 优化付款审核流程，推动供应商美易单开通量提升超50%。</li>
             <li class="hover-move"><strong>发票与退税管理：</strong>精准认领销售回款并分配至各节点开具增值税票，有效平衡总体税负，高效赋能年度 2000 万退税目标的顺利完成；对接税务准备退税文件并制作台账，汇总应付/应收发票超150张支撑完整退税流程。</li>
             <li class="hover-move"><strong>账务审查与授信：</strong>在税务平台通过自动化比查手段，逐笔精准核验 1200 余张发票，准确率达 100%，并独立撰写3版银行授信资料支撑企业融资；全面核查 120 余项质保款、押金及个人借款，累计发送 90 余份催款函。</li>
             <li class="hover-move"><strong>跨部门督办与外汇：</strong>建立周度跟踪机制，有效汇总 15 位项目及销售经理的开票与回款进度并制作排名表，重点督促3个滞后项目加速推进；高效提交 50 余笔转口贸易外汇支付申请，完善合同与设备清单，保障跨境支付合规顺畅。</li>
           </ul>
+
+          <ul class="text-[0.95rem] text-gray-700 list-disc pl-4 space-y-2 lang-en">
+            <li class="hover-move"><strong>Fund Optimization & Automation:</strong> Coordinated scheduled payments based on monthly budgets; optimized the payment approval process using <strong>Excel VBA</strong>, increasing supplier adoption of the "MeiYiDan" platform by over 50%.</li>
+            <li class="hover-move"><strong>Tax Refund Management:</strong> Accurately claimed sales receipts and allocated them to nodes for VAT invoicing, empowering the achievement of the 20M RMB annual tax refund goal. Consolidated 150+ AP/AR invoices to support the full refund process.</li>
+            <li class="hover-move"><strong>Account Auditing & Credit:</strong> Automatically verified 1,200+ invoices on the tax platform with 100% accuracy; independently drafted 3 versions of bank credit applications; audited 120+ warranty funds and deposits, sending out 90+ collection letters.</li>
+            <li class="hover-move"><strong>Cross-Departmental Supervision:</strong> Established a weekly tracking mechanism to summarize the invoicing progress of 15 managers, urging 3 lagging projects to accelerate; efficiently submitted 50+ forex payment applications for entrepot trade.</li>
+          </ul>
         </div>
 
+        <!-- 实习经历 2 -->
         <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2023.12-2024.04</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">安永华明会计师事务所(深圳分所)</h3>
-          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>金融组实习生</strong> | 某头部基金公司基金产品年报审计</p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">
+            <span class="lang-cn">安永华明会计师事务所(深圳分所)</span>
+            <span class="lang-en">Ernst & Young Hua Ming LLP (Shenzhen Branch)</span>
+          </h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move">
+            <strong class="lang-cn">金融组实习生</strong><strong class="lang-en">Audit Intern (Financial Services)</strong>
+            <span class="lang-cn"> | 某头部基金公司基金产品年报审计</span><span class="lang-en"> | Annual Audit for Top Fund Products</span>
+          </p>
+          
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2 lang-cn">
             <li class="hover-move"><strong>数据清洗与底稿审查：</strong>进驻客户现场导出 100 余项底层财务数据，利用数据分析技巧发现并修正报表不匹配、科目缺失等 20 余处异常；深度使用 Skywind 系统，逐项检查并修复自动底稿中的 10 多处公式链接逻辑与汇率计算错误。</li>
             <li class="hover-move"><strong>金融报表勾稽与测算：</strong>独立复查并解决主表与附注间的复杂勾稽关系，重新精准测算债券与 ABS 投资收益并逐一核对，保障账表完全一致。</li>
             <li class="hover-move"><strong>风险模型评估：</strong>运用数据分析思维，通过 PBC 中的久期 (Duration) 和凸性 (Convexity) 数据，对产品的利率风险敏感性进行重新估计测算，成功发现并指出了客户内部风险模型中的 3 处偏差。</li>
             <li class="hover-move"><strong>函证程序与报告校对：</strong>严格执行函证收发闭环，制作并发送 100 多份函证，通过网络及电话多重核验地址，修正 15 份错误信息，最终函证回收率高达 95%；交叉比对校准 35 只基金的年度审计报告差异。</li>
           </ul>
+
+          <ul class="text-[0.95rem] text-gray-700 list-disc pl-4 space-y-2 lang-en">
+            <li class="hover-move"><strong>Data Cleaning & Audit Papers:</strong> Exported 100+ financial datasets at the client site, utilizing data analysis skills to correct 20+ anomalies like mismatched reports; used the Skywind system to fix 10+ formula logic and exchange rate errors in automated working papers.</li>
+            <li class="hover-move"><strong>Financial Cross-Checking:</strong> Independently verified complex cross-checking relationships between main statements and notes; accurately recalculated bond and ABS investment returns to ensure total consistency.</li>
+            <li class="hover-move"><strong>Risk Model Assessment:</strong> Applied data-driven thinking to reassess interest rate risk sensitivity using Duration and Convexity data, successfully identifying and reporting 3 deviations in the client's internal risk models.</li>
+            <li class="hover-move"><strong>Confirmation Procedures:</strong> Executed the end-to-end confirmation process, dispatched 100+ letters, corrected 15 erroneous records, achieving a 95% recovery rate; cross-compared the annual audit reports for 35 funds.</li>
+          </ul>
         </div>
 
+        <!-- 实习经历 3 -->
         <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2022.12-2023.04</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">立信会计师事务所(武汉分所)</h3>
-          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>审计组实习生</strong> | 某大型食品工业企业年度报告审计</p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">
+            <span class="lang-cn">立信会计师事务所(武汉分所)</span>
+            <span class="lang-en">BDO China Shu Lun Pan CPAs LLP (Wuhan)</span>
+          </h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move">
+            <strong class="lang-cn">审计组实习生</strong><strong class="lang-en">Audit Intern</strong>
+            <span class="lang-cn"> | 某大型食品工业企业年度报告审计</span><span class="lang-en"> | Annual Report Audit for Food Enterprise</span>
+          </p>
+          
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2 lang-cn">
             <li class="hover-move"><strong>实地监盘与资产清查：</strong>深入企业一线，对 3 家下属子公司的 39 种核心存货及 30 种固定资产执行严格的实地监盘，规范填列盘点表，确保账实相符。</li>
             <li class="hover-move"><strong>实质性细节测试：</strong>针对关键科目进行科学抽样，严格抽查 50 多张原始凭证与记账凭证；针对大额资金流转，双向核对 200 多条银行存款与日记账记录，防范企业资金风险。</li>
             <li class="hover-move"><strong>截止与合规测试：</strong>对存货流转、主营业务收入与期间费用等核心利润表项目进行顺查与逆查，穿透核对 300 多张原始凭证，严格检验企业会计处理的截止性与准则规范性。</li>
+          </ul>
+
+          <ul class="text-[0.95rem] text-gray-700 list-disc pl-4 space-y-2 lang-en">
+            <li class="hover-move"><strong>Inventory Inspection:</strong> Executed strict physical inventory counts for 39 core inventory items and 30 fixed assets across 3 subsidiaries, ensuring book-to-physical agreement.</li>
+            <li class="hover-move"><strong>Substantive Testing:</strong> Conducted scientific sampling on key accounts, inspecting 50+ original vouchers; performed two-way checks on 200+ bank deposit records for large fund transfers to mitigate financial risks.</li>
+            <li class="hover-move"><strong>Cut-off & Compliance:</strong> Performed forward and backward tracing on core income statement items, verifying 300+ original vouchers to test the cut-off and regulatory compliance of accounting treatments.</li>
           </ul>
         </div>
       </section>
 
       <section id="campus" class="mt-8 mb-16">
-        <h1 class="section-title">🏫 校园经历</h1>
+        <h1 class="section-title">
+          <span class="lang-cn">🏫 校园经历</span>
+          <span class="lang-en">🏫 Campus Experience</span>
+        </h1>
         
         <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2021.12-2023.06</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">大学生创新创业训练项目</h3>
-          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>项目负责人</strong></p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">
+            <span class="lang-cn">大学生创新创业训练项目</span>
+            <span class="lang-en">National Innovation & Entrepreneurship Training Program</span>
+          </h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move">
+            <strong class="lang-cn">项目负责人</strong><strong class="lang-en">Project Leader</strong>
+          </p>
+          
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2 lang-cn">
             <li class="hover-move">带领 6 人团队，独立撰写立项书中 1 万余字的财务可行性分析核心章节，主导设计 80 余页高质量答辩 PPT，最终以 92 分的高分（全校前5%）通过省级评审获专项立项。</li>
             <li class="hover-move">带队深入调研 20 余家相关企业，整合多方数据源，最终形成 3 万余字的深度商业调研报告，以优异成绩完成结项（排名前3%）。</li>
+          </ul>
+
+          <ul class="text-[0.95rem] text-gray-700 list-disc pl-4 space-y-2 lang-en">
+            <li class="hover-move">Led a 6-person team to draft the core financial feasibility analysis chapter (10,000+ words), designed an 80-page defense PPT, and obtained provincial project approval with a high score of 92 (top 5% in the university).</li>
+            <li class="hover-move">Conducted in-depth research on 20+ enterprises, integrated multiple data sources, and formed a 30,000+ word comprehensive business report, completing the project with an "Excellent" rating (top 3%).</li>
           </ul>
         </div>
 
         <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2020.12-2022.06</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">国际会计沙龙组织</h3>
-          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>学生秘书长</strong></p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">
+            <span class="lang-cn">国际会计沙龙组织</span>
+            <span class="lang-en">International Accounting Salon</span>
+          </h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move">
+            <strong class="lang-cn">学生秘书长</strong><strong class="lang-en">Student Secretary-General</strong>
+          </p>
+          
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2 lang-cn">
             <li class="hover-move">全面负责大型校园专业赛事活动的组织、策划与线上线下宣传工作，成功邀请 5 名国际四大会计师事务所的资深员工担任大赛特邀评委。</li>
             <li class="hover-move">主导跨部门协作，成功外联并整合 4 家企业赞助商的资金与实物资源；引入精细化财务预算管理，将整场活动的预算执行偏差率严格控制在 5% 以内。</li>
+          </ul>
+
+          <ul class="text-[0.95rem] text-gray-700 list-disc pl-4 space-y-2 lang-en">
+            <li class="hover-move">Comprehensively managed the organization and promotion of large-scale professional campus competitions; successfully invited 5 senior employees from the "Big Four" accounting firms to serve as guest judges.</li>
+            <li class="hover-move">Spearheaded cross-departmental collaboration, integrating financial resources from 4 corporate sponsors; introduced refined financial budget management, keeping the budget execution deviation strictly within 5%.</li>
           </ul>
         </div>
       </section>
@@ -360,6 +520,22 @@
 
   <!-- 页面交互脚本 -->
   <script>
+    // 0. 中英文一键切换功能
+    function toggleLanguage() {
+      const body = document.body;
+      const btnText = document.getElementById('lang-btn-text');
+      if (body.classList.contains('lang-cn')) {
+        body.classList.remove('lang-cn');
+        body.classList.add('lang-en');
+        btnText.innerText = '查看中文版';
+      } else {
+        body.classList.remove('lang-en');
+        body.classList.add('lang-cn');
+        btnText.innerText = 'English Version';
+      }
+    }
+
+    // 1. 顶部进度条与高级动态渐变背景
     const bg = document.getElementById('dynamic-bg');
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
@@ -381,16 +557,16 @@
     let height = canvas.height = window.innerHeight;
     const particles = [];
     
-    // [修改2]：粒子变得非常大，极其清晰且拥有强烈的光晕发光感
-    const particleCount = 60; // 数量适中，但单个体积变大很多
+    // 增加数量，超级巨大且明亮
+    const particleCount = 65; 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: Math.random() * 8 + 3, // 半径暴增，最大可达 11px
-        dx: (Math.random() - 0.5) * 0.7, // 速度稍微加快一点点
+        r: Math.random() * 8 + 3.5, // 半径 3.5 到 11.5
+        dx: (Math.random() - 0.5) * 0.7, 
         dy: (Math.random() - 0.5) * 0.7,
-        opacity: Math.random() * 0.8 + 0.3 // 透明度大幅提升，极其显眼
+        opacity: Math.random() * 0.8 + 0.3
       });
     }
     
@@ -400,13 +576,12 @@
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         
-        // 使用非常亮的白色，并增加巨大的柔和外发光，模拟光斑效果
         ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
-        ctx.shadowBlur = 25; // 发光范围巨大
+        ctx.shadowBlur = 25;
         ctx.shadowColor = `rgba(255, 255, 255, ${p.opacity})`;
         
         ctx.fill();
-        ctx.shadowBlur = 0; // 重置阴影
+        ctx.shadowBlur = 0;
         
         p.x += p.dx;
         p.y += p.dy;
@@ -423,6 +598,7 @@
       height = canvas.height = window.innerHeight;
     });
 
+    // 3. 项目卡片 3D 鼠标跟踪反光特效
     const cards = document.querySelectorAll('.paper-tilt');
     cards.forEach(card => {
       card.addEventListener('mousemove', e => {
