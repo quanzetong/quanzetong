@@ -43,7 +43,7 @@
     /* 高级粒子特效 Canvas */
     #bg-canvas {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: -1; pointer-events: none; opacity: 0.85; /* 提升粒子层整体能见度 */
+      z-index: -1; pointer-events: none; opacity: 0.9; /* 进一步提升层能见度 */
     }
 
     /* 顶部滚动进度条 */
@@ -74,7 +74,6 @@
       -webkit-backdrop-filter: blur(12px);
     }
     
-    /* [新增]：所有卡片的左侧渐变修饰条 */
     .glass-card::before {
       content: "";
       position: absolute;
@@ -89,13 +88,11 @@
       box-shadow: 0 20px 40px rgba(22, 45, 72, 0.12);
     }
     
-    /* 鼠标跟随的内部光晕 */
     .glass-card::after {
       content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
       background: radial-gradient(circle at var(--glow-x, 0px) var(--glow-y, 0px), rgba(236,112,125,0.12), transparent 40%);
     }
 
-    /* 文字段落交互反馈（鼠标放上去微动） */
     .hover-move {
       transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease;
       display: block;
@@ -108,7 +105,6 @@
       display: list-item;
     }
 
-    /* 彩色标签 */
     .paper-badge {
       display: inline-block; margin-bottom: 0.8rem;
       border-radius: 999px; border: 1px solid rgba(255,255,255,0.8);
@@ -117,7 +113,6 @@
       box-shadow: 0 4px 10px rgba(236, 112, 125, 0.2);
     }
 
-    /* 圆形照片包裹器 */
     .avatar-wrapper {
       position: relative;
       width: 160px;
@@ -152,13 +147,14 @@
   <!-- 顶部滚动条 -->
   <div class="scroll-progress" id="scroll-progress"></div>
 
-  <!-- [修改2]：顶部导航栏 优化排版 (居中对齐，增加间距，字体微调) -->
+  <!-- 顶部导航栏 -->
   <nav class="sticky top-0 w-full bg-white/60 backdrop-blur-lg border-b border-gray-100 z-50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex justify-center gap-10 md:gap-16 overflow-x-auto text-base font-semibold text-gray-700 tracking-wide">
       <a href="#home" class="hover:text-pink-500 transition hover:-translate-y-0.5">主页</a>
       <a href="#about" class="hover:text-pink-500 transition hover:-translate-y-0.5">个人简介</a>
       <a href="#education" class="hover:text-pink-500 transition hover:-translate-y-0.5">教育背景</a>
-      <a href="#experience" class="hover:text-pink-500 transition hover:-translate-y-0.5">工作经历</a>
+      <!-- [修改1]：工作经历改为实习经历 -->
+      <a href="#experience" class="hover:text-pink-500 transition hover:-translate-y-0.5">实习经历</a>
       <a href="#campus" class="hover:text-pink-500 transition hover:-translate-y-0.5">校园经历</a>
     </div>
   </nav>
@@ -170,10 +166,8 @@
     <aside class="w-full md:w-64 shrink-0">
       <div class="md:sticky md:top-24">
         
-        <!-- 圆形照片 -->
         <div class="avatar-wrapper">
           <img src="photo.jpg" alt="个人照片" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <!-- 默认占位图标，当无照片时显示 -->
           <div class="hidden w-full h-full items-center justify-center text-gray-300 text-5xl" style="display: none;">
             <i class="fas fa-user-circle"></i>
           </div>
@@ -214,10 +208,8 @@
     <!-- 右侧：详细内容区 -->
     <main class="flex-1 min-w-0">
       
-      <!-- 个人简介 模块 -->
       <section id="about">
         <h1 class="section-title">👤 个人简介</h1>
-        <!-- [修改1]：所有 glass-card 已经加上了全局的左边框特效 -->
         <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <p class="leading-relaxed text-gray-700 hover-move mb-3">
             我是<strong>全泽同</strong>，目前在<strong>华中科技大学</strong>攻读会计学（全日制）硕士学位。本科毕业于<strong>中南财经政法大学</strong>，成绩优异（3.9/4.0）。我拥有丰富的财务BP、审计及项目管理实习经验，曾在美的集团、安永、立信等知名企业及机构实习。具备扎实的财会专业基础，已通过CPA 5科及ACCA。
@@ -252,15 +244,10 @@
         </div>
       </section>
 
-      <!-- 教育背景 模块 -->
-      <!-- [修改3]：教育背景排版美化、加入学校Logo图标和985/211标签 -->
       <section id="education">
         <h1 class="section-title">🎓 教育背景</h1>
-        
-        <!-- 华科卡片 -->
         <div class="glass-card paper-tilt p-7 mb-5 pl-8 flex flex-col md:flex-row gap-5 items-start">
           <div class="w-14 h-14 shrink-0 rounded-full border border-gray-200 shadow-sm bg-white flex items-center justify-center overflow-hidden">
-            <!-- 你可以把 src 换成真正的华科logo图片路径 -->
             <img src="hust_logo.png" alt="华科" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <i class="fas fa-university text-pink-400 text-2xl hidden" style="display:none;"></i>
           </div>
@@ -282,10 +269,8 @@
           </div>
         </div>
 
-        <!-- 中南财大卡片 -->
         <div class="glass-card paper-tilt p-7 mb-8 pl-8 flex flex-col md:flex-row gap-5 items-start">
           <div class="w-14 h-14 shrink-0 rounded-full border border-gray-200 shadow-sm bg-white flex items-center justify-center overflow-hidden">
-            <!-- 你可以把 src 换成真正的中南财大logo图片路径 -->
             <img src="zuel_logo.png" alt="中南财大" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <i class="fas fa-university text-blue-400 text-2xl hidden" style="display:none;"></i>
           </div>
@@ -307,7 +292,6 @@
         </div>
       </section>
 
-      <!-- 工作经历 模块 -->
       <section id="experience" class="mt-8">
         <h1 class="section-title">💼 实习经历</h1>
         
@@ -347,7 +331,6 @@
         </div>
       </section>
 
-      <!-- 校园经历 模块 -->
       <section id="campus" class="mt-8 mb-16">
         <h1 class="section-title">🏫 校园经历</h1>
         
@@ -377,40 +360,37 @@
 
   <!-- 页面交互脚本 -->
   <script>
-    // 1. 顶部进度条与高级动态渐变背景
     const bg = document.getElementById('dynamic-bg');
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const ratio = maxScroll > 0 ? scrollY / maxScroll : 0;
       
-      // 更新顶部进度条
       document.getElementById('scroll-progress').style.transform = `scaleX(${Math.min(Math.max(ratio, 0), 1)})`;
       
-      // 更新背景颜色渐变 (随滚动柔和变色)
       const hue1 = 340 - (ratio * 130); 
       const hue2 = 220 + (ratio * 50);
       const angle = 135 + (ratio * 45);
       bg.style.background = `linear-gradient(${angle}deg, hsl(${hue1}, 60%, 96%), hsl(${hue2}, 60%, 96%))`;
     });
 
-    // 2. 苹果风极简粒子特效 (优化版：更明显、更有质感)
+    // 2. 苹果风极简粒子特效 (终极放大增强版)
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
     const particles = [];
     
-    // [修改4]：增加粒子数量和大小，增强发光效果
-    const particleCount = 85; // 增加数量
+    // [修改2]：粒子变得非常大，极其清晰且拥有强烈的光晕发光感
+    const particleCount = 60; // 数量适中，但单个体积变大很多
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        r: Math.random() * 3 + 1.2, // 增大半径，使其更明显
-        dx: (Math.random() - 0.5) * 0.5,
-        dy: (Math.random() - 0.5) * 0.5,
-        opacity: Math.random() * 0.6 + 0.2 // 提升透明度，更亮
+        r: Math.random() * 8 + 3, // 半径暴增，最大可达 11px
+        dx: (Math.random() - 0.5) * 0.7, // 速度稍微加快一点点
+        dy: (Math.random() - 0.5) * 0.7,
+        opacity: Math.random() * 0.8 + 0.3 // 透明度大幅提升，极其显眼
       });
     }
     
@@ -420,22 +400,19 @@
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         
-        // 使用纯白发光，带来苹果发布会的高级朦胧质感
+        // 使用非常亮的白色，并增加巨大的柔和外发光，模拟光斑效果
         ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
-        ctx.shadowBlur = 12; // 增加外发光阴影
-        ctx.shadowColor = 'rgba(255, 255, 255, 0.9)';
+        ctx.shadowBlur = 25; // 发光范围巨大
+        ctx.shadowColor = `rgba(255, 255, 255, ${p.opacity})`;
         
         ctx.fill();
-        
-        // 取消阴影避免影响其他绘制
-        ctx.shadowBlur = 0;
+        ctx.shadowBlur = 0; // 重置阴影
         
         p.x += p.dx;
         p.y += p.dy;
         
-        // 边界反弹
-        if (p.x < 0 || p.x > width) p.dx *= -1;
-        if (p.y < 0 || p.y > height) p.dy *= -1;
+        if (p.x < -20 || p.x > width + 20) p.dx *= -1;
+        if (p.y < -20 || p.y > height + 20) p.dy *= -1;
       });
       requestAnimationFrame(drawParticles);
     }
@@ -446,7 +423,6 @@
       height = canvas.height = window.innerHeight;
     });
 
-    // 3. 项目卡片 3D 鼠标跟踪反光特效
     const cards = document.querySelectorAll('.paper-tilt');
     cards.forEach(card => {
       card.addEventListener('mousemove', e => {
