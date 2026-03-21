@@ -17,128 +17,189 @@
       --theme-blue: #6C95B5;
     }
     
-    /* 1. 梦幻渐变背景与点阵纹理 */
     body {
-      background:
-        radial-gradient(circle at 10% 12%, rgba(236, 112, 125, 0.15), transparent 32%),
-        radial-gradient(circle at 90% 9%, rgba(108, 149, 181, 0.18), transparent 34%),
-        linear-gradient(180deg, #f5f8ff 0%, #ffffff 20%, #ffffff 100%);
-      background-attachment: fixed;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       color: #333;
-    }
-    .bg-grid::before {
-      content: ""; position: fixed; inset: 0; pointer-events: none;
-      background-image: radial-gradient(rgba(86, 121, 152, 0.18) 0.8px, transparent 0.8px);
-      background-size: 26px 26px; opacity: 0.15; z-index: -2;
+      margin: 0;
+      overflow-x: hidden;
     }
 
-    /* 2. 顶部滚动进度条 */
+    /* 动态渐变背景容器 */
+    #dynamic-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -3;
+      transition: background 0.5s ease-out;
+      background: linear-gradient(135deg, hsl(340, 60%, 96%), hsl(220, 60%, 96%));
+    }
+
+    /* 点阵纹理层，提升质感 */
+    .bg-grid {
+      position: fixed; inset: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(86, 121, 152, 0.15) 1px, transparent 1px);
+      background-size: 28px 28px; opacity: 0.6; z-index: -2;
+    }
+
+    /* 高级粒子特效 Canvas */
+    #bg-canvas {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: -1; pointer-events: none; opacity: 0.85; /* 提升粒子层整体能见度 */
+    }
+
+    /* 顶部滚动进度条 */
     .scroll-progress {
-      position: fixed; top: 0; left: 0; width: 100%; height: 4px;
+      position: fixed; top: 0; left: 0; width: 100%; height: 3px;
       transform-origin: left center; transform: scaleX(0);
       background: linear-gradient(90deg, var(--theme-pink), var(--theme-blue));
-      box-shadow: 0 3px 14px rgba(236, 112, 125, 0.35); z-index: 999;
+      box-shadow: 0 2px 10px rgba(236, 112, 125, 0.3); z-index: 999;
     }
 
-    /* 3. 标题样式 */
+    /* 标题样式 */
     .section-title {
-      display: inline-block; margin: 2rem 0 1rem; padding: 0.45rem 1rem;
+      display: inline-block; margin: 2rem 0 1.2rem; padding: 0.45rem 1.2rem;
       border-radius: 0.8rem; border: 1px solid rgba(108, 149, 181, 0.2);
-      background: linear-gradient(130deg, rgba(236, 112, 125, 0.16), rgba(108, 149, 181, 0.16));
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
-      font-size: 1.4rem; font-weight: 700;
+      background: linear-gradient(130deg, rgba(236, 112, 125, 0.12), rgba(108, 149, 181, 0.12));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+      font-size: 1.4rem; font-weight: 700; color: #1a202c;
     }
 
-    /* 4. 通用毛玻璃块 (添加了 hover 光晕和 3D 特效类) */
+    /* 通用毛玻璃块 (带有动态 3D 和彩色左边框) */
     .glass-card {
       position: relative; overflow: hidden; transform-style: preserve-3d;
-      will-change: transform; transition: transform 0.28s ease, box-shadow 0.28s ease;
-      background: linear-gradient(150deg, rgba(255, 255, 255, 0.97), rgba(248, 251, 255, 0.92));
-      border: 1px solid rgba(108, 149, 181, 0.18); border-radius: 1rem;
-      box-shadow: 0 14px 34px rgba(22, 45, 72, 0.09);
-      backdrop-filter: blur(8px);
+      will-change: transform; transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: linear-gradient(150deg, rgba(255, 255, 255, 0.95), rgba(248, 251, 255, 0.85));
+      border: 1px solid rgba(108, 149, 181, 0.2); border-radius: 1rem;
+      box-shadow: 0 12px 30px rgba(22, 45, 72, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    
+    /* [新增]：所有卡片的左侧渐变修饰条 */
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 6px;
+      background: linear-gradient(180deg, var(--theme-pink), var(--theme-blue));
+      z-index: 10;
     }
     
     .glass-card.paper-tilt:hover {
-      transform: perspective(950px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px);
-      box-shadow: 0 24px 50px rgba(22, 45, 72, 0.2);
+      transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-4px);
+      box-shadow: 0 20px 40px rgba(22, 45, 72, 0.12);
     }
     
     /* 鼠标跟随的内部光晕 */
     .glass-card::after {
       content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-      background: radial-gradient(circle at var(--glow-x, 0px) var(--glow-y, 0px), rgba(236,112,125,0.15), transparent 36%);
+      background: radial-gradient(circle at var(--glow-x, 0px) var(--glow-y, 0px), rgba(236,112,125,0.12), transparent 40%);
     }
 
-    /* 5. 动态新闻滚动区 (教育背景使用) */
-    .edu-container {
-      border: 1px solid rgba(108, 149, 181, 0.24); border-radius: 0.95rem;
-      padding: 1.5rem;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 255, 0.94));
+    /* 文字段落交互反馈（鼠标放上去微动） */
+    .hover-move {
+      transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.3s ease;
+      display: block;
     }
-    .edu-item {
-      margin-bottom: 1.5rem; padding: 1rem 1.2rem; border-left: 4px solid var(--theme-pink);
-      border-radius: 0.5rem; background: linear-gradient(110deg, rgba(236,112,125,0.07), rgba(108,149,181,0.05));
+    .hover-move:hover {
+      transform: translateX(6px);
+      color: #000;
     }
-    .edu-item:last-child { margin-bottom: 0; }
+    li.hover-move {
+      display: list-item;
+    }
 
     /* 彩色标签 */
     .paper-badge {
       display: inline-block; margin-bottom: 0.8rem;
       border-radius: 999px; border: 1px solid rgba(255,255,255,0.8);
       background: linear-gradient(115deg, rgba(236,112,125,0.92), rgba(108,149,181,0.88));
-      color: white; font-size: 0.75rem; font-weight: bold; padding: 0.2rem 0.8rem; letter-spacing: 0.05em;
+      color: white; font-size: 0.75rem; font-weight: bold; padding: 0.25rem 0.9rem; letter-spacing: 0.05em;
       box-shadow: 0 4px 10px rgba(236, 112, 125, 0.2);
+    }
+
+    /* 圆形照片包裹器 */
+    .avatar-wrapper {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 1.5rem auto;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(108, 149, 181, 0.15);
+      border: 4px solid rgba(255, 255, 255, 0.8);
+      background-color: #f3f4f6;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .avatar-wrapper:hover {
+      transform: scale(1.03) translateY(-4px);
+      box-shadow: 0 15px 35px rgba(108, 149, 181, 0.25);
+    }
+    .avatar-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
     }
   </style>
 </head>
 
-<body class="bg-grid">
+<body>
+  <!-- 动态渐变背景与粒子 -->
+  <div id="dynamic-bg"></div>
+  <div class="bg-grid"></div>
+  <canvas id="bg-canvas"></canvas>
+
   <!-- 顶部滚动条 -->
   <div class="scroll-progress" id="scroll-progress"></div>
 
-  <!-- 顶部导航栏 -->
-  <nav class="sticky top-0 w-full bg-white/70 backdrop-blur-md border-b border-gray-200 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex gap-6 overflow-x-auto text-sm font-medium text-gray-700">
-      <a href="#home" class="hover:text-pink-500 transition">主页</a>
-      <a href="#about" class="hover:text-pink-500 transition">个人简介</a>
-      <a href="#education" class="hover:text-pink-500 transition">教育背景</a>
-      <a href="#experience" class="hover:text-pink-500 transition">工作经历</a>
-      <a href="#campus" class="hover:text-pink-500 transition">校园经历</a>
+  <!-- [修改2]：顶部导航栏 优化排版 (居中对齐，增加间距，字体微调) -->
+  <nav class="sticky top-0 w-full bg-white/60 backdrop-blur-lg border-b border-gray-100 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-center gap-10 md:gap-16 overflow-x-auto text-base font-semibold text-gray-700 tracking-wide">
+      <a href="#home" class="hover:text-pink-500 transition hover:-translate-y-0.5">主页</a>
+      <a href="#about" class="hover:text-pink-500 transition hover:-translate-y-0.5">个人简介</a>
+      <a href="#education" class="hover:text-pink-500 transition hover:-translate-y-0.5">教育背景</a>
+      <a href="#experience" class="hover:text-pink-500 transition hover:-translate-y-0.5">工作经历</a>
+      <a href="#campus" class="hover:text-pink-500 transition hover:-translate-y-0.5">校园经历</a>
     </div>
   </nav>
 
-  <!-- 主体内容区：左右两栏响应式 -->
+  <!-- 主体内容区 -->
   <div class="max-w-6xl mx-auto px-4 py-10 flex flex-col md:flex-row gap-10" id="home">
     
     <!-- 左侧：个人信息悬浮栏 -->
     <aside class="w-full md:w-64 shrink-0">
       <div class="md:sticky md:top-24">
-        <!-- 姓名和短简介 (移除了照片，增加双校信息) -->
-        <h2 class="text-3xl font-bold text-center mb-4">全泽同</h2>
-        <div class="text-center text-gray-500 mb-8 text-sm space-y-2">
+        
+        <!-- 圆形照片 -->
+        <div class="avatar-wrapper">
+          <img src="photo.jpg" alt="个人照片" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <!-- 默认占位图标，当无照片时显示 -->
+          <div class="hidden w-full h-full items-center justify-center text-gray-300 text-5xl" style="display: none;">
+            <i class="fas fa-user-circle"></i>
+          </div>
+        </div>
+        
+        <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">全泽同</h2>
+        <div class="text-center text-gray-500 mb-8 text-sm space-y-2 font-medium">
           <p>硕士：华中科技大学 | 会计学</p>
           <p>本科：中南财经政法大学 | 会计学</p>
         </div>
         
-        <!-- 联系方式 -->
         <div class="space-y-4 text-sm px-4">
-          <a href="mailto:quanzetong@163.com" class="flex items-center gap-3 text-gray-600 hover:text-pink-500 transition">
+          <a href="mailto:quanzetong@163.com" class="flex items-center gap-3 text-gray-600 hover:text-pink-500 transition hover-move">
             <i class="fas fa-envelope w-5 text-center text-lg"></i> <span>quanzetong@163.com</span>
           </a>
-          <a href="tel:+8618071590005" class="flex items-center gap-3 text-gray-600 hover:text-pink-500 transition">
+          <a href="tel:+8618071590005" class="flex items-center gap-3 text-gray-600 hover:text-pink-500 transition hover-move">
             <i class="fas fa-phone w-5 text-center text-lg"></i> <span>(+86) 180-7159-0005</span>
           </a>
-          <div class="flex items-center gap-3 text-gray-600 hover:text-pink-500 transition">
+          <div class="flex items-center gap-3 text-gray-600 transition hover-move">
             <i class="fab fa-weixin w-5 text-center text-lg"></i> <span>WeChat: 18071590005</span>
           </div>
-          <div class="flex items-center gap-3 text-gray-600 hover:text-pink-500 transition">
+          <div class="flex items-center gap-3 text-gray-600 transition hover-move">
             <i class="fas fa-user-tie w-5 text-center text-lg"></i> <span>中共党员</span>
           </div>
         </div>
 
-        <!-- 简历与证明材料下载按钮 -->
         <div class="mt-8 px-4 flex flex-col gap-3">
           <a href="resume.pdf" target="_blank" class="flex items-center justify-center gap-2 py-2.5 px-4 bg-gradient-to-r from-[#EC707D] to-[#e45b6a] text-white rounded-full shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all text-sm font-medium">
             <i class="fas fa-file-pdf"></i> <span>查看 PDF 简历</span>
@@ -156,56 +217,92 @@
       <!-- 个人简介 模块 -->
       <section id="about">
         <h1 class="section-title">👤 个人简介</h1>
-        <div class="glass-card paper-tilt p-6 mb-6">
-          <p class="leading-relaxed text-gray-700">
-            我是<strong>全泽同</strong>，目前在<strong>华中科技大学</strong>攻读会计学（全日制）硕士学位。本科毕业于<strong>中南财经政法大学</strong>，成绩优异（3.9/4.0）。我拥有丰富的财务BP、审计及项目管理实习经验，曾在美的集团、安永、立信等知名企业及机构实习。具备扎实的财会专业基础，已通过CPA 5科及ACCA。<br><br>
-            此外，我在<strong>商业数据分析与企业系统操作</strong>方面有着深入的实践。熟练掌握 <strong>SQL</strong> 和 <strong>Python (pandas)</strong> 进行多维度的数据爬取、清洗与分析；精通运用 <strong>Tableau</strong> 和 <strong>PowerBI</strong> 搭建商业数据看板与可视化建模；并在实习中熟练操作 <strong>SAP</strong> 系统完成各项财务核算与流程流转。同时，我对新技术保持高度敏锐，能够熟练运用各类 <strong>AI 效率工具 (如 ChatGPT、Claude、Cursor 等)</strong> 赋能数据处理与日常工作，大幅提升分析效率与产出质量。期待在财务、审计与数据驱动的商业决策等核心业务领域深耕并创造价值。
+        <!-- [修改1]：所有 glass-card 已经加上了全局的左边框特效 -->
+        <div class="glass-card paper-tilt p-7 mb-6 pl-8">
+          <p class="leading-relaxed text-gray-700 hover-move mb-3">
+            我是<strong>全泽同</strong>，目前在<strong>华中科技大学</strong>攻读会计学（全日制）硕士学位。本科毕业于<strong>中南财经政法大学</strong>，成绩优异（3.9/4.0）。我拥有丰富的财务BP、审计及项目管理实习经验，曾在美的集团、安永、立信等知名企业及机构实习。具备扎实的财会专业基础，已通过CPA 5科及ACCA。
+          </p>
+          <p class="leading-relaxed text-gray-700 hover-move mb-3">
+            在日常工作与学习中，我<strong>经常思考并积极推动财务流程的数字化、智能化与自动化</strong>。我熟练掌握 <strong>SQL</strong> 以及 <strong>Python (pandas, numpy)</strong> 进行多维度的数据爬取、清洗与深度分析；精通运用 <strong>Tableau</strong> 和 <strong>PowerBI</strong> 搭建商业数据看板与可视化建模；同时，我能够熟练使用 <strong>Excel VBA</strong> 编写宏程序以大幅优化重复性工作，并在实习中熟练操作 <strong>SAP</strong> 系统完成各项财务核算与跨部门流程流转。
+          </p>
+          <p class="leading-relaxed text-gray-700 hover-move">
+            此外，我对新技术保持高度敏锐，能够熟练运用各类 <strong>AI 前沿工具与 Agent (如 ChatGPT、Claude、Gemini 等)</strong> 深度赋能数据处理与日常工作，显著提升分析效率与产出质量。期待在财务、审计与数据驱动的商业决策等核心业务领域深耕并创造价值。
           </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-          <!-- 专业素养 -->
-          <div class="glass-card paper-tilt p-5">
-            <h3 class="font-bold text-lg mb-3 flex items-center gap-2"><i class="fas fa-certificate text-pink-500"></i> 专业素养</h3>
-            <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
-              <li><strong>执业资格：</strong>CPA (5/6)、ACCA</li>
-              <li><strong>金融证书：</strong>证券从业资格证、基金从业资格证</li>
-              <li><strong>荣誉奖项：</strong>国家奖学金、校级一等/二等奖学金、优秀毕业生、优秀党员</li>
+          <div class="glass-card paper-tilt p-6 pl-8">
+            <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fas fa-certificate text-pink-500"></i> 专业素养</h3>
+            <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700">
+              <li class="hover-move"><strong>执业资格：</strong>CPA (5/6)、ACCA</li>
+              <li class="hover-move"><strong>金融证书：</strong>证券从业资格证、基金从业资格证</li>
+              <li class="hover-move"><strong>英语水平：</strong>CET-6 (612)、CET-4 (620)</li>
+              <li class="hover-move"><strong>荣誉奖项：</strong>国家奖学金、校级一等奖学金、优秀学生干部、优秀毕业生、优秀党员</li>
             </ul>
           </div>
-          <!-- 技能与语言 -->
-          <div class="glass-card paper-tilt p-5">
-            <h3 class="font-bold text-lg mb-3 flex items-center gap-2"><i class="fas fa-laptop-code text-blue-500"></i> 技能与语言</h3>
-            <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700">
-              <li><strong>数据分析：</strong>精通 SQL、Python (pandas)、Tableau、PowerBI 分析与可视化</li>
-              <li><strong>新质生产力：</strong>熟练运用前沿 AI 大模型工具提升工作流效率</li>
-              <li><strong>财务软件：</strong>熟练掌握 SAP 系统操作及 Office 办公软件</li>
+          <div class="glass-card paper-tilt p-6 pl-8">
+            <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fas fa-laptop-code text-blue-500"></i> 技能与工具</h3>
+            <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700">
+              <li class="hover-move"><strong>数据分析：</strong>精通 SQL、Python (pandas, numpy)、Tableau、PowerBI 进行分析与可视化</li>
+              <li class="hover-move"><strong>流程自动化：</strong>熟练运用 Excel VBA 编写自动化脚本，优化财务流程</li>
+              <li class="hover-move"><strong>新质生产力：</strong>熟练运用前沿 AI 模型及 Agent (ChatGPT/Claude/Gemini) 提升工作流效率</li>
+              <li class="hover-move"><strong>企业软件：</strong>熟练掌握 SAP 系统操作及进阶 Office 办公软件</li>
             </ul>
           </div>
         </div>
       </section>
 
       <!-- 教育背景 模块 -->
+      <!-- [修改3]：教育背景排版美化、加入学校Logo图标和985/211标签 -->
       <section id="education">
         <h1 class="section-title">🎓 教育背景</h1>
-        <div class="glass-card paper-tilt p-6 edu-container">
-          <div class="edu-item">
-            <h3 class="font-bold text-lg text-gray-900 mb-1">[2024.09 - 2027.06] 华中科技大学</h3>
-            <p class="text-gray-700 font-medium mb-2">管理学院 - 会计学 (全日制) 研究生</p>
-            <p class="text-sm text-gray-600 leading-relaxed">
-              <strong>成绩排名：</strong>3.9/4.0 (前5%)<br>
-              <strong>校园职务：</strong>学生党支部组织委员<br>
-              <strong>荣誉奖项：</strong>校级一等奖学金、校级二等奖学金、优秀党员
-            </p>
+        
+        <!-- 华科卡片 -->
+        <div class="glass-card paper-tilt p-7 mb-5 pl-8 flex flex-col md:flex-row gap-5 items-start">
+          <div class="w-14 h-14 shrink-0 rounded-full border border-gray-200 shadow-sm bg-white flex items-center justify-center overflow-hidden">
+            <!-- 你可以把 src 换成真正的华科logo图片路径 -->
+            <img src="hust_logo.png" alt="华科" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <i class="fas fa-university text-pink-400 text-2xl hidden" style="display:none;"></i>
           </div>
-          <div class="edu-item">
-            <h3 class="font-bold text-lg text-gray-900 mb-1">[2020.09 - 2024.06] 中南财经政法大学</h3>
-            <p class="text-gray-700 font-medium mb-2">会计学院 - 会计学 (全日制) 本科</p>
-            <p class="text-sm text-gray-600 leading-relaxed">
-              <strong>成绩排名：</strong>3.9/4.0 (第二名)<br>
-              <strong>校园职务：</strong>团支部书记、学生党支部组织委员<br>
-              <strong>荣誉奖项：</strong>国家奖学金、校级一等奖学金、优秀学生干部、优秀毕业生
-            </p>
+          <div class="flex-1 w-full">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+              <h3 class="font-bold text-xl text-gray-900 hover-move flex flex-wrap items-center gap-2">
+                华中科技大学
+                <span class="bg-[#EC707D] text-white text-xs px-2 py-0.5 rounded-md font-normal tracking-wide shadow-sm">985</span>
+                <span class="bg-[#6C95B5] text-white text-xs px-2 py-0.5 rounded-md font-normal tracking-wide shadow-sm">211</span>
+                <span class="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2 py-0.5 rounded-md font-normal tracking-wide">双一流</span>
+              </h3>
+              <span class="text-gray-500 text-sm font-semibold mt-1 md:mt-0 tracking-wide">[2024.09 - 2027.06]</span>
+            </div>
+            <p class="text-gray-700 font-medium mb-3 hover-move text-sm md:text-base">管理学院 - 会计学 (全日制) 硕士研究生</p>
+            <div class="text-sm text-gray-600 leading-relaxed hover-move space-y-1.5">
+              <p><i class="fas fa-star text-pink-400 w-5"></i> <strong>成绩排名：</strong>3.9/4.0</p>
+              <p><i class="fas fa-user-shield text-blue-400 w-5"></i> <strong>校园职务：</strong>学生党支部组织委员</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中南财大卡片 -->
+        <div class="glass-card paper-tilt p-7 mb-8 pl-8 flex flex-col md:flex-row gap-5 items-start">
+          <div class="w-14 h-14 shrink-0 rounded-full border border-gray-200 shadow-sm bg-white flex items-center justify-center overflow-hidden">
+            <!-- 你可以把 src 换成真正的中南财大logo图片路径 -->
+            <img src="zuel_logo.png" alt="中南财大" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <i class="fas fa-university text-blue-400 text-2xl hidden" style="display:none;"></i>
+          </div>
+          <div class="flex-1 w-full">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+              <h3 class="font-bold text-xl text-gray-900 hover-move flex flex-wrap items-center gap-2">
+                中南财经政法大学
+                <span class="bg-[#6C95B5] text-white text-xs px-2 py-0.5 rounded-md font-normal tracking-wide shadow-sm">211</span>
+                <span class="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2 py-0.5 rounded-md font-normal tracking-wide">双一流</span>
+              </h3>
+              <span class="text-gray-500 text-sm font-semibold mt-1 md:mt-0 tracking-wide">[2020.09 - 2024.06]</span>
+            </div>
+            <p class="text-gray-700 font-medium mb-3 hover-move text-sm md:text-base">会计学院 - 会计学 (全日制) 本科</p>
+            <div class="text-sm text-gray-600 leading-relaxed hover-move space-y-1.5">
+              <p><i class="fas fa-trophy text-pink-400 w-5"></i> <strong>成绩排名：</strong>3.9/4.0 (第二名)</p>
+              <p><i class="fas fa-users text-blue-400 w-5"></i> <strong>校园职务：</strong>团支部书记、学生党支部组织委员</p>
+            </div>
           </div>
         </div>
       </section>
@@ -214,102 +311,153 @@
       <section id="experience" class="mt-8">
         <h1 class="section-title">💼 实习经历</h1>
         
-        <!-- 实习经历 1 -->
-        <div class="glass-card paper-tilt p-6 mb-6">
+        <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2025.06-2025.10</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900">美的集团(上海)有限公司</h3>
-          <p class="text-sm text-gray-600 mb-3"><strong>财务BP实习生</strong> | 库卡汽车自动化事业部</p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
-            <li><strong>付款排款：</strong>按月度资金预算安排到期款，推动付款方式优化，使供应商美易单开通量提升超50%。</li>
-            <li><strong>资金与税务：</strong>认领回款并分配至各节点开票，助力完成年度2000万退税目标；准备超150张发票支撑出口退税流程。</li>
-            <li><strong>账务核查：</strong>核查120余项质保款与押金并发送催款函；逐笔核查1200余张发票用于银行授信申请，准确率达100%。</li>
-            <li><strong>进度管理：</strong>每周汇总15位项目经理和销售经理的开票/回款进度，督促落后项目加速执行，提交50余笔转口贸易外汇支付申请。</li>
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">美的集团(上海)有限公司</h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>财务BP实习生</strong> | 库卡汽车自动化事业部</p>
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+            <li class="hover-move"><strong>资金优化与自动化：</strong>结合月度资金预算与库存周转情况统筹排款，并利用 <strong>Excel VBA</strong> 优化付款审核流程，推动供应商美易单开通量提升超50%。</li>
+            <li class="hover-move"><strong>发票与退税管理：</strong>精准认领销售回款并分配至各节点开具增值税票，有效平衡总体税负，高效赋能年度 2000 万退税目标的顺利完成；对接税务准备退税文件并制作台账，汇总应付/应收发票超150张支撑完整退税流程。</li>
+            <li class="hover-move"><strong>账务审查与授信：</strong>在税务平台通过自动化比查手段，逐笔精准核验 1200 余张发票，准确率达 100%，并独立撰写3版银行授信资料支撑企业融资；全面核查 120 余项质保款、押金及个人借款，累计发送 90 余份催款函。</li>
+            <li class="hover-move"><strong>跨部门督办与外汇：</strong>建立周度跟踪机制，有效汇总 15 位项目及销售经理的开票与回款进度并制作排名表，重点督促3个滞后项目加速推进；高效提交 50 余笔转口贸易外汇支付申请，完善合同与设备清单，保障跨境支付合规顺畅。</li>
           </ul>
         </div>
 
-        <!-- 实习经历 2 -->
-        <div class="glass-card paper-tilt p-6 mb-6">
+        <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2023.12-2024.04</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900">安永华明会计师事务所(深圳分所)</h3>
-          <p class="text-sm text-gray-600 mb-3"><strong>金融组实习生</strong> | 参与头部基金公司年报审计</p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
-            <li><strong>数据与底稿：</strong>处理100余项财务数据，修正20余处数据错误；检查Skywind系统底稿，修正10多处公式与汇率计算错误。</li>
-            <li><strong>函证管理：</strong>负责制作100多份函证，通过网络和电话逐笔核验地址，修正15份错误，函证回收率达95%。</li>
-            <li><strong>报表与风控：</strong>重新测算债券和ABS投资收益并逐一核对；利用久期和凸性数据对利率风险重新估计测算，发现客户模型偏差3处。负责对比校对35只基金的年度审计报告。</li>
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">安永华明会计师事务所(深圳分所)</h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>金融组实习生</strong> | 某头部基金公司基金产品年报审计</p>
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+            <li class="hover-move"><strong>数据清洗与底稿审查：</strong>进驻客户现场导出 100 余项底层财务数据，利用数据分析技巧发现并修正报表不匹配、科目缺失等 20 余处异常；深度使用 Skywind 系统，逐项检查并修复自动底稿中的 10 多处公式链接逻辑与汇率计算错误。</li>
+            <li class="hover-move"><strong>金融报表勾稽与测算：</strong>独立复查并解决主表与附注间的复杂勾稽关系，重新精准测算债券与 ABS 投资收益并逐一核对，保障账表完全一致。</li>
+            <li class="hover-move"><strong>风险模型评估：</strong>运用数据分析思维，通过 PBC 中的久期 (Duration) 和凸性 (Convexity) 数据，对产品的利率风险敏感性进行重新估计测算，成功发现并指出了客户内部风险模型中的 3 处偏差。</li>
+            <li class="hover-move"><strong>函证程序与报告校对：</strong>严格执行函证收发闭环，制作并发送 100 多份函证，通过网络及电话多重核验地址，修正 15 份错误信息，最终函证回收率高达 95%；交叉比对校准 35 只基金的年度审计报告差异。</li>
           </ul>
         </div>
 
-        <!-- 实习经历 3 -->
-        <div class="glass-card paper-tilt p-6 mb-6">
+        <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2022.12-2023.04</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900">立信会计师事务所(武汉分所)</h3>
-          <p class="text-sm text-gray-600 mb-3"><strong>审计组实习生</strong> | 大型食品工业企业年报审计</p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
-            <li><strong>实地盘点：</strong>执行3家子公司的存货与固定资产监盘，抽盘了39种存货和30种固定资产并填列盘点报告。</li>
-            <li><strong>凭证抽查：</strong>执行实质性程序细节测试，抽查50多张原始凭证；查验2家子公司大额银行存款，双向核对200多条凭证记录。</li>
-            <li><strong>截止测试：</strong>对存货、收入、费用等项目进行顺查逆查，核对300多张原始凭证及账簿记录是否符合规范。</li>
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">立信会计师事务所(武汉分所)</h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>审计组实习生</strong> | 某大型食品工业企业年度报告审计</p>
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+            <li class="hover-move"><strong>实地监盘与资产清查：</strong>深入企业一线，对 3 家下属子公司的 39 种核心存货及 30 种固定资产执行严格的实地监盘，规范填列盘点表，确保账实相符。</li>
+            <li class="hover-move"><strong>实质性细节测试：</strong>针对关键科目进行科学抽样，严格抽查 50 多张原始凭证与记账凭证；针对大额资金流转，双向核对 200 多条银行存款与日记账记录，防范企业资金风险。</li>
+            <li class="hover-move"><strong>截止与合规测试：</strong>对存货流转、主营业务收入与期间费用等核心利润表项目进行顺查与逆查，穿透核对 300 多张原始凭证，严格检验企业会计处理的截止性与准则规范性。</li>
           </ul>
         </div>
-
       </section>
 
       <!-- 校园经历 模块 -->
-      <section id="campus" class="mt-8">
+      <section id="campus" class="mt-8 mb-16">
         <h1 class="section-title">🏫 校园经历</h1>
         
-        <div class="glass-card paper-tilt p-6 mb-6">
+        <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2021.12-2023.06</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900">大学生创新创业训练项目</h3>
-          <p class="text-sm text-gray-600 mb-3"><strong>项目负责人</strong></p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
-            <li>带领6人团队，独立撰写立项书1万字财务可行性分析核心章节，主导设计80余页答辩PPT，以92分（前5%）通过省级评审获专项立项。</li>
-            <li>带队调研20余家企业，形成3万字调研报告完成优秀结项（前3%）。</li>
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">大学生创新创业训练项目</h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>项目负责人</strong></p>
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+            <li class="hover-move">带领 6 人团队，独立撰写立项书中 1 万余字的财务可行性分析核心章节，主导设计 80 余页高质量答辩 PPT，最终以 92 分的高分（全校前5%）通过省级评审获专项立项。</li>
+            <li class="hover-move">带队深入调研 20 余家相关企业，整合多方数据源，最终形成 3 万余字的深度商业调研报告，以优异成绩完成结项（排名前3%）。</li>
           </ul>
         </div>
 
-        <div class="glass-card paper-tilt p-6 mb-6">
+        <div class="glass-card paper-tilt p-7 mb-6 pl-8">
           <div class="paper-badge">2020.12-2022.06</div>
-          <h3 class="font-bold text-lg mb-2 text-gray-900">国际会计沙龙组织</h3>
-          <p class="text-sm text-gray-600 mb-3"><strong>学生秘书长</strong></p>
-          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-1">
-            <li>负责活动组织宣传，邀请5名国际四大会计师事务所员工任大赛评委。</li>
-            <li>跨部门协作整合4家赞助商资源，将活动的预算执行偏差率严格控制在5%以内。</li>
+          <h3 class="font-bold text-lg mb-2 text-gray-900 hover-move">国际会计沙龙组织</h3>
+          <p class="text-sm text-gray-600 mb-4 hover-move"><strong>学生秘书长</strong></p>
+          <ul class="text-sm text-gray-700 list-disc pl-4 space-y-2">
+            <li class="hover-move">全面负责大型校园专业赛事活动的组织、策划与线上线下宣传工作，成功邀请 5 名国际四大会计师事务所的资深员工担任大赛特邀评委。</li>
+            <li class="hover-move">主导跨部门协作，成功外联并整合 4 家企业赞助商的资金与实物资源；引入精细化财务预算管理，将整场活动的预算执行偏差率严格控制在 5% 以内。</li>
           </ul>
         </div>
       </section>
       
-      <footer class="mt-16 border-t border-gray-200 pt-6 text-center text-sm text-gray-500 pb-10">
-        © 2024 全泽同. Powered by Native HTML & Tailwind.
-      </footer>
     </main>
   </div>
 
   <!-- 页面交互脚本 -->
   <script>
-    // 1. 顶部进度条随滚动变化
+    // 1. 顶部进度条与高级动态渐变背景
+    const bg = document.getElementById('dynamic-bg');
     window.addEventListener('scroll', () => {
-      const doc = document.documentElement;
-      const max = doc.scrollHeight - window.innerHeight;
-      const ratio = max > 0 ? window.scrollY / max : 0;
+      const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = maxScroll > 0 ? scrollY / maxScroll : 0;
+      
+      // 更新顶部进度条
       document.getElementById('scroll-progress').style.transform = `scaleX(${Math.min(Math.max(ratio, 0), 1)})`;
+      
+      // 更新背景颜色渐变 (随滚动柔和变色)
+      const hue1 = 340 - (ratio * 130); 
+      const hue2 = 220 + (ratio * 50);
+      const angle = 135 + (ratio * 45);
+      bg.style.background = `linear-gradient(${angle}deg, hsl(${hue1}, 60%, 96%), hsl(${hue2}, 60%, 96%))`;
     });
 
-    // 2. 项目卡片 3D 鼠标跟踪反光特效
+    // 2. 苹果风极简粒子特效 (优化版：更明显、更有质感)
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    const particles = [];
+    
+    // [修改4]：增加粒子数量和大小，增强发光效果
+    const particleCount = 85; // 增加数量
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 3 + 1.2, // 增大半径，使其更明显
+        dx: (Math.random() - 0.5) * 0.5,
+        dy: (Math.random() - 0.5) * 0.5,
+        opacity: Math.random() * 0.6 + 0.2 // 提升透明度，更亮
+      });
+    }
+    
+    function drawParticles() {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        
+        // 使用纯白发光，带来苹果发布会的高级朦胧质感
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+        ctx.shadowBlur = 12; // 增加外发光阴影
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.9)';
+        
+        ctx.fill();
+        
+        // 取消阴影避免影响其他绘制
+        ctx.shadowBlur = 0;
+        
+        p.x += p.dx;
+        p.y += p.dy;
+        
+        // 边界反弹
+        if (p.x < 0 || p.x > width) p.dx *= -1;
+        if (p.y < 0 || p.y > height) p.dy *= -1;
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+    
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    // 3. 项目卡片 3D 鼠标跟踪反光特效
     const cards = document.querySelectorAll('.paper-tilt');
     cards.forEach(card => {
       card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
-        // 计算鼠标相对卡片中心的位置 (范围 -0.5 到 0.5)
         const px = (e.clientX - rect.left) / rect.width - 0.5;
         const py = (e.clientY - rect.top) / rect.height - 0.5;
-        // 映射为 X轴和 Y轴的旋转角度
-        card.style.setProperty('--rx', `${-py * 8}deg`);
-        card.style.setProperty('--ry', `${px * 10}deg`);
-        // 设置内部光晕圆心的坐标
+        card.style.setProperty('--rx', `${-py * 6}deg`);
+        card.style.setProperty('--ry', `${px * 8}deg`);
         card.style.setProperty('--glow-x', `${e.clientX - rect.left}px`);
         card.style.setProperty('--glow-y', `${e.clientY - rect.top}px`);
       });
-      // 鼠标离开时复原
       card.addEventListener('mouseleave', () => {
         card.style.removeProperty('--rx');
         card.style.removeProperty('--ry');
