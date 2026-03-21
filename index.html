@@ -94,17 +94,10 @@
     }
 
     /* =========================================
-       3. 鼠标聚光灯特效 (Mouse Glow)
+       3. 鼠标交互光晕特效 (优化版：磁性彩色边缘光泽)
+       不是大面积白光，而是一个高级的彩色渐变虚影，模拟彩虹/玻璃折射
        ========================================= */
-    #mouse-glow {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none;
-      z-index: 9998;
-      background: radial-gradient(circle 500px at var(--x, -1000px) var(--y, -1000px), rgba(255, 255, 255, 0.5), transparent 60%);
-      mix-blend-mode: soft-light;
-      transition: background 0.1s ease;
-    }
+
 
     .scroll-progress {
       position: fixed; top: 0; left: 0; width: 100%; height: 3px;
@@ -115,29 +108,23 @@
 
     .reveal-item {
       opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: opacity, transform;
+      transform: translateY(40px) scale(0.96);
+      filter: blur(10px);
+      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform, filter;
     }
     .reveal-item.is-visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
+      filter: blur(0);
     }
 
     /* =========================================
-       极致的苹果风毛玻璃卡片 (Glassmorphism)
+       卡片上的鼠标悬浮描边高亮 (更高级的指示方式)
+       当鼠标悬停在卡片上时，卡片边框会亮起
        ========================================= */
-    .section-title {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      margin: 2rem 0 1.2rem; padding: 0.45rem 1.2rem;
-      border-radius: 0.8rem; border: 1px solid rgba(255, 255, 255, 0.6);
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-      font-size: 1.4rem; font-weight: 700; color: #1d1d1f;
-    }
-
     .glass-card {
       position: relative; overflow: hidden;
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
@@ -146,7 +133,9 @@
       box-shadow: 0 10px 30px rgba(31, 38, 135, 0.05);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), 
+                  box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.4s ease;
     }
     
     .glass-card::before {
@@ -161,6 +150,19 @@
     .glass-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 16px 40px rgba(31, 38, 135, 0.08);
+      /* 鼠标悬停时，边框变成带有主题色的发光状态 */
+      border-color: rgba(236, 112, 125, 0.3);
+    }
+
+    .section-title {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin: 2rem 0 1.2rem; padding: 0.45rem 1.2rem;
+      border-radius: 0.8rem; border: 1px solid rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      font-size: 1.4rem; font-weight: 700; color: #1d1d1f;
     }
 
     .hover-move {
@@ -199,7 +201,6 @@
       background-color: #ffffff;
     }
 
-    /* 头像样式优化：略微放大尺寸 (150px)，保持整体在一屏内可见 */
     .avatar-wrapper {
       position: relative; width: 150px; height: 150px;
       margin: 0 auto 1.2rem auto; border-radius: 50%; overflow: hidden;
@@ -216,16 +217,15 @@
       width: 100%; height: 100%; object-fit: cover; object-position: center 15%;
     }
 
-    /* 侧边栏按钮样式优化：调小尺寸，保持紧凑 */
     .btn-primary {
       display: flex; align-items: center; justify-content: center; gap: 0.4rem;
-      width: 100%; padding: 0.6rem 0; /* 调小上下内边距 */
+      width: 100%; padding: 0.6rem 0;
       border-radius: 999px;
-      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em; /* 减小字号 */
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em;
       transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
       background: linear-gradient(135deg, #EC707D, #e45b6a);
       color: white;
-      box-shadow: 0 4px 12px rgba(236, 112, 125, 0.25); /* 阴影也稍微收敛 */
+      box-shadow: 0 4px 12px rgba(236, 112, 125, 0.25);
       border: 1px solid rgba(255,255,255,0.3);
     }
     .btn-primary:hover {
@@ -236,13 +236,13 @@
 
     .btn-secondary {
       display: flex; align-items: center; justify-content: center; gap: 0.4rem;
-      width: 100%; padding: 0.6rem 0; /* 调小上下内边距 */
+      width: 100%; padding: 0.6rem 0;
       border-radius: 999px;
-      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em; /* 减小字号 */
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em;
       transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
       background: linear-gradient(135deg, #6C95B5, #5882a3);
       color: white;
-      box-shadow: 0 4px 12px rgba(108, 149, 181, 0.25); /* 阴影也稍微收敛 */
+      box-shadow: 0 4px 12px rgba(108, 149, 181, 0.25);
       border: 1px solid rgba(255,255,255,0.3);
     }
     .btn-secondary:hover {
@@ -264,7 +264,7 @@
   <div class="aurora-glass-layer"></div>
   <div class="bg-grid"></div>
   <canvas id="bg-canvas"></canvas>
-  <div id="mouse-glow"></div>
+  
   <div class="scroll-progress" id="scroll-progress"></div>
 
   <!-- 顶部导航栏 -->
@@ -272,7 +272,7 @@
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="hidden md:block w-[140px]"></div>
       <div class="flex flex-1 justify-center gap-4 md:gap-12 overflow-x-auto text-[0.95rem] md:text-base font-semibold text-gray-700 tracking-wide no-scrollbar">
-        <a href="#home" class="hover:text-pink-500 transition hover:-translate-y-0.5 whitespace-nowrap"><span class="lang-cn">主页</span><span class="lang-en">Home</span></a>
+        <a href="#home" class="hover:text-pink-50 transition hover:-translate-y-0.5 whitespace-nowrap"><span class="lang-cn">主页</span><span class="lang-en">Home</span></a>
         <a href="#about" class="hover:text-pink-500 transition hover:-translate-y-0.5 whitespace-nowrap"><span class="lang-cn">个人简介</span><span class="lang-en">About Me</span></a>
         <a href="#education" class="hover:text-pink-500 transition hover:-translate-y-0.5 whitespace-nowrap"><span class="lang-cn">教育背景</span><span class="lang-en">Education</span></a>
         <a href="#experience" class="hover:text-pink-500 transition hover:-translate-y-0.5 whitespace-nowrap"><span class="lang-cn">实习经历</span><span class="lang-en">Experience</span></a>
@@ -305,7 +305,6 @@
           <span class="lang-en">Zetong Quan</span>
         </h2>
         
-        <!-- 紧凑间距，确保一屏展示 -->
         <div class="text-center text-gray-500 text-[0.85rem] font-medium space-y-1.5 mb-5 w-full border-b border-gray-300/40 pb-5">
           <p class="lang-cn">硕士：华中科技大学 | 会计学</p>
           <p class="lang-en">Master: HUST | Accounting</p>
@@ -857,16 +856,11 @@
       }
     }
 
-    // 1. 鼠标聚光灯特效与流体 Aurora 滚动互动
+    // 1. 鼠标交互光晕特效与流体 Aurora 滚动互动
     const blob1 = document.querySelector('.aurora-1');
     const blob2 = document.querySelector('.aurora-2');
     const blob3 = document.querySelector('.aurora-3');
-    const mouseGlow = document.getElementById('mouse-glow');
 
-    document.addEventListener('mousemove', (e) => {
-      mouseGlow.style.setProperty('--x', `${e.clientX}px`);
-      mouseGlow.style.setProperty('--y', `${e.clientY}px`);
-    });
 
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
@@ -887,18 +881,37 @@
     // 2. 苹果风 Scroll Reveal 进场动画
     const observerOptions = {
       root: null,
-      rootMargin: '0px',
-      threshold: 0.12 
+      rootMargin: '40px 0px 0px 0px',
+      threshold: 0.05 
     };
+
+    let delay = 0;
+    let delayTimeout = null;
 
     const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
+          setTimeout(() => {
+            entry.target.classList.add('is-visible');
+          }, delay);
+          delay += 100;
+          
+          clearTimeout(delayTimeout);
+          delayTimeout = setTimeout(() => { delay = 0; }, 100);
+          
           observer.unobserve(entry.target);
         }
       });
     }, observerOptions);
+
+    setTimeout(() => {
+      document.querySelectorAll('.reveal-item').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight) {
+          el.classList.add('is-visible');
+        }
+      });
+    }, 100);
 
     document.querySelectorAll('.reveal-item').forEach((el) => {
       revealObserver.observe(el);
@@ -911,17 +924,17 @@
     let height = canvas.height = window.innerHeight;
     const particles = [];
     
-    const particleCount = 35; 
+    const particleCount = 70; 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        baseR: Math.random() * 4 + 1.5,
+        baseR: Math.random() * 4 + 2, 
         phase: Math.random() * Math.PI * 2,
         phaseSpeed: Math.random() * 0.015 + 0.005,
-        dx: (Math.random() - 0.5) * 0.2,
-        dy: (Math.random() - 0.5) * 0.2,
-        baseOpacity: Math.random() * 0.25 + 0.1
+        dx: (Math.random() - 0.5) * 0.25, 
+        dy: (Math.random() - 0.5) * 0.25,
+        baseOpacity: Math.random() * 0.25 + 0.15 
       });
     }
     
@@ -936,7 +949,7 @@
         ctx.arc(p.x, p.y, Math.max(0, currentR), 0, Math.PI * 2);
         
         ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, currentOpacity)})`;
-        ctx.shadowBlur = 20;
+        ctx.shadowBlur = 25;
         ctx.shadowColor = `rgba(255, 255, 255, ${Math.max(0, currentOpacity)})`;
         
         ctx.fill();
